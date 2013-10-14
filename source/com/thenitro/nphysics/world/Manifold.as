@@ -39,11 +39,21 @@ package com.thenitro.nphysics.world {
 		
 		public function poolPrepare():void {
 			_normal.zero();
+			
+			a = null;
+			b = null;
+			
+			penetration = 0;
 		};
 		
 		public function dispose():void {
 			_pool.put(_normal);
 			_normal = null;
+			
+			a = null;
+			b = null;
+			
+			penetration = 0;
 		};
 	}
 }

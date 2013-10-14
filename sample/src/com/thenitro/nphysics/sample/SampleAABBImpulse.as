@@ -8,10 +8,10 @@ package com.thenitro.nphysics.sample {
 	import starling.display.Sprite;
 	import starling.events.Event;
 	
-	public final class SampleAABBCircleImpulse extends Sprite {
-		private static const SIZE:int = 5;
+	public final class SampleAABBImpulse extends Sprite {
+		private static const SIZE:int = 10;
 		
-		public function SampleAABBCircleImpulse() {
+		public function SampleAABBImpulse() {
 			super();
 			addEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 		};
@@ -25,13 +25,12 @@ package com.thenitro.nphysics.sample {
 				bounds.size.x = stage.stageWidth  - SIZE;
 				bounds.size.y = stage.stageHeight - SIZE;
 				
-			var world:World = new World(bounds, 50, 0.8, 0.1);
+			var world:World = new World(bounds, SIZE * 4, 0.8, 0.01);
 			
 			addChild(world.canvas);
 			
-			
-			for (var i:int = 0; i < 1000; i++) {
-				var rectB:AABB 		= new AABB();
+			for (var i:int = 0; i < 500; i++) {
+				var rectB:AABB  = new AABB();
 				
 					rectB.position.randomize(0, Math.min(stage.stageWidth, stage.stageHeight));
 					

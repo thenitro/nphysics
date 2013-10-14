@@ -9,6 +9,7 @@ package com.thenitro.nphysics.world {
 	import com.thenitro.ngine.pool.Pool;
 	import com.thenitro.nphysics.bounding.AABB;
 	import com.thenitro.nphysics.bounding.Body;
+	import com.thenitro.nphysics.bounding.Circle;
 	
 	public final class PhysicsCollider extends GridCollider {
 		private var _pool:Pool = Pool.getInstance();
@@ -34,12 +35,18 @@ package com.thenitro.nphysics.world {
 				return false;
 			}
 			
+			var manifold:Manifold;
+			
 			if (pEntityA is AABB && pEntityB is AABB) {
-				var manifold:Manifold = AABBtoAABB(pEntityA as AABB, pEntityB as AABB);
-				
-				if (manifold) {
-					resolveCollision(manifold);
-				}
+				manifold = AABBtoAABB(pEntityA as AABB, pEntityB as AABB);	
+			}
+			
+			if (pEntityA is Circle && pEntityB is Circle) {
+				manifold = CircleToCircle(pEntityA as Circle, pEntityB as Circle);
+			}
+			
+			if (manifold) {
+				resolveCollision(manifold);
 				
 				_pool.put(manifold);
 				
@@ -71,7 +78,7 @@ package com.thenitro.nphysics.world {
 					manifold.a = pA;
 					manifold.b = pB;
 					
-					if (overlapX > overlapY) {
+					if (overlapX < overlapY) {
 						manifold.penetration = overlapX;
 						
 						if (normal.x < 0) {
@@ -100,6 +107,42 @@ package com.thenitro.nphysics.world {
 			return manifold;
 		};
 		
+		private function CircleToCircle(pA:Circle, pB:Circle):Manifold {
+			var normal:Vector2D = pB.position.substract(pA.position, true);
+			
+			var radius:Number = pA.size + pB.size;
+				radius *= radius;
+			
+			if (normal.lengthSquared() > radius) {
+				_pool.put(normal);
+				
+				return null;
+			}
+			
+			var distance:Number   = normal.lenght();
+			
+			var manifold:Manifold = Manifold.EMPTY;
+			
+				manifold.a = pA;
+				manifold.b = pB;
+			
+			if (distance) {
+				manifold.penetration = (pA.size + pB.size) - distance;
+				
+				manifold.normal.x = normal.x / distance;
+				manifold.normal.y = normal.y / distance;
+			} else {
+				manifold.penetration = pA.size;
+				
+				manifold.normal.x = 1;
+				manifold.normal.y = 0;
+			}
+			
+			_pool.put(normal);
+			
+			return manifold;
+		};
+		
 		private function resolveCollision(pManifold:Manifold):void {
 			var a:Body = pManifold.a;
 			var b:Body = pManifold.b;
@@ -108,6 +151,9 @@ package com.thenitro.nphysics.world {
 			var rvDotNormal:Number 		  = relativeVelocity.dotProduct(pManifold.normal);
 			
 			if (rvDotNormal > 0) {
+				_pool.put(relativeVelocity);
+				_pool.put(impulse);
+				
 				return;
 			}
 			

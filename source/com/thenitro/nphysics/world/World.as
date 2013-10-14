@@ -4,6 +4,7 @@ package com.thenitro.nphysics.world {
 	import com.thenitro.nphysics.bounding.Body;
 	
 	import starling.display.Sprite;
+	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
 	
 	public final class World {
@@ -74,7 +75,7 @@ package com.thenitro.nphysics.world {
 			_canvas.removeChild(pEvent.data.canvas);
 		};
 		
-		private function enterFrameEventHandler(pEvent:Event):void {
+		private function enterFrameEventHandler(pEvent:EnterFrameEvent):void {
 			_manager.update();
 		};
 	};
