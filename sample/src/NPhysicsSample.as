@@ -1,5 +1,6 @@
 package {
 	import com.thenitro.ngine.display.DocumentClass;
+	import com.thenitro.nphysics.sample.SampleAABBCircleImpulse;
 	import com.thenitro.nphysics.sample.SampleAABBImpulse;
 	import com.thenitro.nphysics.sample.SampleCircleImpulse;
 	
@@ -7,8 +8,9 @@ package {
 	public class NPhysicsSample extends DocumentClass {
 		
 		public function NPhysicsSample() {
-			super(SampleAABBImpulse, true);
+			//super(SampleAABBImpulse, true);
 			//super(SampleCircleImpulse, true);
+			super(SampleAABBCircleImpulse, true);
 		};
 	};
 }

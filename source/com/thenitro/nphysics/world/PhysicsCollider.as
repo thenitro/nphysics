@@ -45,6 +45,14 @@ package com.thenitro.nphysics.world {
 				manifold = CircleToCircle(pEntityA as Circle, pEntityB as Circle);
 			}
 			
+			if (pEntityA is AABB && pEntityB is Circle) {
+				manifold = AABBvsCircle(pEntityA as AABB, pEntityB as Circle);
+			}
+			
+			if (pEntityA is Circle && pEntityB is AABB) {
+				manifold = AABBvsCircle(pEntityB as AABB, pEntityA as Circle);
+			}
+			
 			if (manifold) {
 				resolveCollision(manifold);
 				
@@ -119,7 +127,7 @@ package com.thenitro.nphysics.world {
 				return null;
 			}
 			
-			var distance:Number   = normal.lenght();
+			var distance:Number   = normal.length();
 			
 			var manifold:Manifold = Manifold.EMPTY;
 			
@@ -139,6 +147,74 @@ package com.thenitro.nphysics.world {
 			}
 			
 			_pool.put(normal);
+			
+			return manifold;
+		};
+		
+		private function AABBvsCircle(pA:AABB, pB:Circle):Manifold {
+			var normal:Vector2D  = pB.position.substract(pA.position, true);
+			var closest:Vector2D = normal.clone();
+			
+			var extentX:Number = pA.max.x / 2;
+			var extentY:Number = pA.max.y / 2;
+			
+			closest.x = TMath.clamp(closest.x, -extentX, extentX);
+			closest.y = TMath.clamp(closest.y, -extentY, extentY);
+			
+			var inside:Boolean = false;
+			
+			if (normal.equals(closest)) {
+				inside = true;
+				
+				if (Math.abs(normal.x) > Math.abs(normal.y)) {
+					if (closest.x > 0) {
+						closest.x =  extentX;
+					} else {
+						closest.x = -extentX;
+					}
+				} else {
+					if (closest.y > 0) {
+						closest.y =  extentY;
+					} else {
+						closest.y = -extentY;
+					}
+				}
+			}
+			
+			var normal2:Vector2D = normal.substract(closest, true);
+			var distance:Number  = normal2.lengthSquared();
+			var radius:Number    = pB.size;
+			
+			if (distance > radius * radius && !inside) {
+				_pool.put(normal);
+				_pool.put(normal2);
+				_pool.put(closest);
+				
+				return null;
+			}
+			
+			distance = Math.sqrt(distance);
+			
+			var manifold:Manifold = Manifold.EMPTY;
+			
+				manifold.a = pA;
+				manifold.b = pB;
+				
+				manifold.penetration = radius - distance;
+			
+			normal.normalize();
+				
+			if (inside) {
+				manifold.normal.x = -normal.x;
+				manifold.normal.y = -normal.y;
+			} else {
+				manifold.normal.x = normal.x;
+				manifold.normal.y = normal.y;
+			}
+			
+			_pool.put(normal);
+			_pool.put(normal2);
+			_pool.put(closest);
 			
 			return manifold;
 		};
