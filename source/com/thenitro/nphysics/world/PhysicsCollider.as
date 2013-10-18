@@ -233,10 +233,10 @@ package com.thenitro.nphysics.world {
 				return;
 			}
 			
-			var e:Number = Math.min(a.restitution, b.restitution);
+			var e:Number = Math.max(a.restitution, b.restitution);
 			var j:Number = -(1 + e) * rvDotNormal;
 				j /= a.invMass + b.invMass;
-			
+				
 			var impulse:Vector2D = pManifold.normal.multiplyScalar(j, true);
 			
 			a.velocity.x -= a.invMass * impulse.x;
@@ -244,6 +244,34 @@ package com.thenitro.nphysics.world {
 			
 			b.velocity.x += b.invMass * impulse.x;
 			b.velocity.y += b.invMass * impulse.y;
+			
+			var tangent:Vector2D = relativeVelocity.clone();
+				tangent.substract(pManifold.normal).multiplyScalar(rvDotNormal);
+			
+			trace("PhysicsCollider.resolveCollision(pManifold)", tangent.x, tangent.y);
+				
+				tangent.normalize();
+			
+			trace("PhysicsCollider.resolveCollision(pManifold)", tangent.x, tangent.y);
+				
+			var jt:Number = relativeVelocity.dotProduct(tangent);
+				jt /= a.invMass + b.invMass;
+				
+			var mu:Number = Math.sqrt(a.friction * a.friction + b.friction * b.friction);
+				
+			if (Math.abs(jt) < j * mu) {
+				tangent.multiplyScalar(jt);
+			} else {
+				tangent.multiplyScalar(-j).multiplyScalar(mu);
+			}
+				
+			trace("PhysicsCollider.resolveCollision(pManifold)", tangent.x, tangent.y);
+			
+			a.velocity.x -= a.invMass * tangent.x;
+			a.velocity.y -= a.invMass * tangent.y;
+			
+			b.velocity.x += b.invMass * tangent.x;
+			b.velocity.y += b.invMass * tangent.y;
 			
 			positionalCorrection(pManifold);
 			
@@ -257,8 +285,8 @@ package com.thenitro.nphysics.world {
 			pManifold.a.position.x -= pManifold.a.invMass * correction * pManifold.normal.x;
 			pManifold.a.position.y -= pManifold.a.invMass * correction * pManifold.normal.y;
 			
-			pManifold.b.position.x += pManifold.a.invMass * correction * pManifold.normal.x;
-			pManifold.b.position.y += pManifold.a.invMass * correction * pManifold.normal.y;
+			pManifold.b.position.x += pManifold.b.invMass * correction * pManifold.normal.x;
+			pManifold.b.position.y += pManifold.b.invMass * correction * pManifold.normal.y;
 		};
 	}
 }

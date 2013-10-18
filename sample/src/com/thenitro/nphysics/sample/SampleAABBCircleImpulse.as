@@ -31,13 +31,16 @@ package com.thenitro.nphysics.sample {
 			
 			addChild(world.canvas);
 			
-			for (var i:int = 0; i < 200; i++) {
+			for (var i:int = 0; i < 20; i++) {
 				var rectB:AABB  = new AABB();
 				
 					rectB.position.randomize(0, Math.min(stage.stageWidth, stage.stageHeight));
 					
 					rectB.max.x = SIZE;
 					rectB.max.y = SIZE;
+					
+					rectB.restitution = 0.1;
+					rectB.mass = 1;
 					
 					rectB.velocity.randomize(-1.0, 1.0);
 				
@@ -50,11 +53,13 @@ package com.thenitro.nphysics.sample {
 				world.addBody(rectB);
 			}
 			
-			for (i = 0; i < 200; i++) {
+			for (i = 0; i < 20; i++) {
 				var circle:Circle  = new Circle();
 					circle.position.randomize(0, Math.min(stage.stageWidth, stage.stageHeight));
 					
 					circle.size = SIZE;
+					circle.restitution = 0.1;
+					circle.mass = 1;
 					
 					circle.velocity.randomize(-1.0, 1.0);
 				

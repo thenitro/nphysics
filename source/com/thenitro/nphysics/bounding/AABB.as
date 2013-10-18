@@ -2,7 +2,7 @@ package com.thenitro.nphysics.bounding {
 	import com.thenitro.ngine.math.vectors.Vector2D;
 	import com.thenitro.ngine.pool.Pool;
 	
-	public final class AABB extends Body {
+	public class AABB extends Body {
 		private var _max:Vector2D;
 		
 		public function AABB() {

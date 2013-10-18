@@ -9,15 +9,14 @@ package com.thenitro.nphysics.bounding {
 		private var _restitution:Number;
 		private var _invMass:Number;
 		
-		private var _bounds:TRectangle;
+		public var friction:Number;
 		
 		public function Body() {
 			super();
 			
 			_invMass = 0;
 			
-			restitution = 0.2;
-			mass = 100 * Math.random();
+			///friction = Math.random();
 		};
 		
 		override public function get reflection():Class {
@@ -48,10 +47,8 @@ package com.thenitro.nphysics.bounding {
 			return _invMass;
 		};
 		
-		public function init(pTexture:DisplayObject, 
-							 pBounds:TRectangle):void {
+		public function init(pTexture:DisplayObject):void {
 			_canvas = pTexture;
-			_bounds = pBounds;
 		};
 		
 		override public function handleCollision(pTarget:Entity):void {
@@ -59,23 +56,9 @@ package com.thenitro.nphysics.bounding {
 		};
 		
 		override public function update():void {
+			_velocity.y += _mass / 10;
+			
 			super.update();
-			
-			if (_position.x < _bounds.position.x) {
-				_position.x = _bounds.position.x;
-				_velocity.x = -_velocity.x;
-			} else if (_position.x > _bounds.size.x) {
-				_position.x = _bounds.size.x;
-				_velocity.x = -_velocity.x;
-			}
-			
-			if (_position.y < _bounds.position.y) {
-				_position.y = _bounds.position.y;
-				_velocity.y = -_velocity.y;
-			} else if (_position.y > _bounds.size.y) {
-				_position.y = _bounds.size.y;
-				_velocity.y = -_velocity.y;
-			}
 		};
 	};
 }
