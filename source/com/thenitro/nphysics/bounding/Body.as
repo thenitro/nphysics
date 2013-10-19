@@ -42,7 +42,7 @@ package com.thenitro.nphysics.bounding {
 		};
 		
 		public function set mass(pValue:Number):void {
-			_mass = pValue;
+			_mass = pValue * 1000;
 			
 			if (_mass != 0) {
 				_invMass = 1 / _mass;

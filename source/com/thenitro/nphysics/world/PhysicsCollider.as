@@ -254,11 +254,11 @@ package com.thenitro.nphysics.world {
 				
 			var impulse:Vector2D = pManifold.normal.multiplyScalar(j, true);
 			
-			a.velocity.x -= a.invMass * impulse.x;
-			a.velocity.y -= a.invMass * impulse.y;
+			a.velocity.x -= a.invMass * impulse.x * (a.restitution + 1);
+			a.velocity.y -= a.invMass * impulse.y * (a.restitution + 1);
 			
-			b.velocity.x += b.invMass * impulse.x;
-			b.velocity.y += b.invMass * impulse.y;
+			b.velocity.x += b.invMass * impulse.x * (b.restitution + 1);
+			b.velocity.y += b.invMass * impulse.y * (b.restitution + 1);
 			
 			var tangent:Vector2D = relativeVelocity.clone();
 				tangent.substract(pManifold.normal).multiplyScalar(rvDotNormal);
