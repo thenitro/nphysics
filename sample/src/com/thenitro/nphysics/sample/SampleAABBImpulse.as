@@ -29,28 +29,9 @@ package com.thenitro.nphysics.sample {
 			
 			addChild(world.canvas);
 			
-			var floor:AABB  = new AABB();
+			createFloor(world);
 			
-			floor.position.x = stage.stageWidth / 2;
-			floor.position.y = stage.stageHeight - 50;
-				
-			floor.max.x = stage.stageWidth;
-			floor.max.y = 100;
-				
-			floor.restitution = 0.2;
-			floor.mass = 0;
 			
-			floor.friction = 0.3;
-				
-			//floor.velocity.randomize(-10.0, 10.0);
-			
-			var floorV:Quad = new Quad(floor.max.x, floor.max.y, Random.color);
-				floorV.pivotX = floor.max.x / 2;
-				floorV.pivotY = floor.max.y / 2;
-				
-				floor.init(floorV);
-			
-			world.addBody(floor);
 			
 			
 			for (var i:int = 0; i < 20; i++) {
@@ -62,7 +43,7 @@ package com.thenitro.nphysics.sample {
 					rectB.max.y = SIZE;
 					
 					rectB.restitution = 0.2;
-					rectB.mass = 1;
+					rectB.mass = 100;
 					
 					rectB.friction = 1.0;
 					
@@ -76,6 +57,29 @@ package com.thenitro.nphysics.sample {
 				
 				world.addBody(rectB);
 			}
+		};
+		
+		private function createFloor(pWorld:World):void {
+			var floor:AABB  = new AABB();
+			
+				floor.position.x = stage.stageWidth / 2;
+				floor.position.y = stage.stageHeight - 50;
+				
+				floor.max.x = stage.stageWidth;
+				floor.max.y = 100;
+				
+				floor.restitution = 0.2;
+				floor.mass = 0;
+				
+				floor.friction = 0.3;
+				
+			var floorV:Quad = new Quad(floor.max.x, floor.max.y, Random.color);
+				floorV.pivotX = floor.max.x / 2;
+				floorV.pivotY = floor.max.y / 2;
+				
+				floor.init(floorV);
+			
+			pWorld.addBody(floor);
 		};
 	};
 }

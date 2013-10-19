@@ -31,15 +31,12 @@ package com.thenitro.nphysics.world {
 		};
 		
 		override public function update(pElapsed:Number):void {
-			trace("PhysicsCollider.update(pElapsed)", pElapsed, _dt);
 			_accumulator += pElapsed;
 			
 			if (_accumulator > _dt) {
 				super.update(pElapsed);
 				
 				_accumulator -= _dt;
-			} else {
-				trace("PhysicsCollider.update(pElapsed) SKIP");
 			}
 		};
 		

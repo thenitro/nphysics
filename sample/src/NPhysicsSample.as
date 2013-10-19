@@ -8,9 +8,9 @@ package {
 	public class NPhysicsSample extends DocumentClass {
 		
 		public function NPhysicsSample() {
-			super(SampleAABBImpulse, true);
+			//super(SampleAABBImpulse, true);
 			//super(SampleCircleImpulse, true);
-			//super(SampleAABBCircleImpulse, true);
+			super(SampleAABBCircleImpulse, true);
 		};
 	};
 }

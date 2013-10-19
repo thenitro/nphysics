@@ -4,6 +4,7 @@ package com.thenitro.nphysics.world {
 	import com.thenitro.nphysics.bounding.Body;
 	
 	import starling.core.Starling;
+	import starling.display.Quad;
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
@@ -32,6 +33,11 @@ package com.thenitro.nphysics.world {
 			_correction = pCorrection;
 			
 			_canvas = new Sprite();
+			
+			var bg:Quad = new Quad(pBounds.size.x, pBounds.size.y);
+				bg.alpha = 0;
+			
+			_canvas.addChild(bg);
 			_canvas.addEventListener(Event.ADDED_TO_STAGE, 
 									 addedToStageEventHandler);
 		};

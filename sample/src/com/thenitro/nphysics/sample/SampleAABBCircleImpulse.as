@@ -31,7 +31,7 @@ package com.thenitro.nphysics.sample {
 			
 			addChild(world.canvas);
 			
-			for (var i:int = 0; i < 20; i++) {
+			for (var i:int = 0; i < 40; i++) {
 				var rectB:AABB  = new AABB();
 				
 					rectB.position.randomize(0, Math.min(stage.stageWidth, stage.stageHeight));
@@ -40,35 +40,35 @@ package com.thenitro.nphysics.sample {
 					rectB.max.y = SIZE;
 					
 					rectB.restitution = 0.1;
-					rectB.mass = 1;
+					rectB.mass = 20;
 					
-					rectB.velocity.randomize(-1.0, 1.0);
+					rectB.velocity.randomize(-20.0, 20.0);
 				
 				var quad:Quad = new Quad(SIZE, SIZE, Random.color);
 					quad.pivotX = SIZE / 2;
 					quad.pivotY = SIZE / 2;
 				
-				rectB.init(quad, bounds);
+				rectB.init(quad);
 				
 				world.addBody(rectB);
 			}
 			
-			for (i = 0; i < 20; i++) {
+			for (i = 0; i < 40; i++) {
 				var circle:Circle  = new Circle();
 					circle.position.randomize(0, Math.min(stage.stageWidth, stage.stageHeight));
 					
 					circle.size = SIZE;
 					circle.restitution = 0.1;
-					circle.mass = 1;
+					circle.mass = 10;
 					
-					circle.velocity.randomize(-1.0, 1.0);
+					circle.velocity.randomize(-10.0, 10.0);
 				
 				var shape:Shape = new Shape();
 				
 				shape.graphics.beginFill(Random.color);
 				shape.graphics.drawCircle(0, 0, SIZE);
 				
-				circle.init(shape, bounds);
+				circle.init(shape);
 				
 				world.addBody(circle);
 			}
