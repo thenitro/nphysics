@@ -3,6 +3,7 @@ package com.thenitro.nphysics.world {
 	import com.thenitro.ngine.math.TRectangle;
 	import com.thenitro.nphysics.bounding.Body;
 	
+	import starling.core.Starling;
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
@@ -46,7 +47,7 @@ package com.thenitro.nphysics.world {
 			_inited = true;
 			
 			_manager = new EntityManager();
-			_manager.setCollider(new PhysicsCollider(_bounds, _gridSize, _correction, _slop));
+			_manager.setCollider(new PhysicsCollider(_bounds, _gridSize, _correction, _slop, Starling.current.nativeStage.frameRate));
 			_manager.addEventListener(EntityManager.EXPIRED,
 									  entityExpiredEventHandler);
 			

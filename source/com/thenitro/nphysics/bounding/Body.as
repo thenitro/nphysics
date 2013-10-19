@@ -55,10 +55,10 @@ package com.thenitro.nphysics.bounding {
 			
 		};
 		
-		override public function update():void {
+		override public function update(pElapsed:Number):void {
 			_velocity.y += _mass / 10;
 			
-			super.update();
+			super.update(pElapsed);
 		};
 	};
 }

@@ -1,8 +1,6 @@
 package com.thenitro.nphysics.world {
-	import com.thenitro.ngine.collections.LinkedList;
 	import com.thenitro.ngine.display.gameentity.Entity;
 	import com.thenitro.ngine.display.gameentity.collider.GridCollider;
-	import com.thenitro.ngine.display.gameentity.collider.LinearCollider;
 	import com.thenitro.ngine.math.TMath;
 	import com.thenitro.ngine.math.TRectangle;
 	import com.thenitro.ngine.math.vectors.Vector2D;
@@ -14,15 +12,35 @@ package com.thenitro.nphysics.world {
 	public final class PhysicsCollider extends GridCollider {
 		private var _pool:Pool = Pool.getInstance();
 		
+		private var _accumulator:Number;
+		private var _dt:Number;
+		
 		private var _correction:Number;
 		private var _slop:Number;
 		
 		public function PhysicsCollider(pBounds:TRectangle, pGridSize:Number, 
-										pCorrection:Number, pSlop:Number) {
+										pCorrection:Number, pSlop:Number,
+										pFrameRate:Number) {
 			super(pBounds.size.x, pBounds.size.y, pGridSize, null);
 			
 			_correction = pCorrection;
 			_slop       = pSlop;
+			
+			_accumulator = 0;
+			_dt          = 1 / pFrameRate;
+		};
+		
+		override public function update(pElapsed:Number):void {
+			trace("PhysicsCollider.update(pElapsed)", pElapsed, _dt);
+			_accumulator += pElapsed;
+			
+			if (_accumulator > _dt) {
+				super.update(pElapsed);
+				
+				_accumulator -= _dt;
+			} else {
+				trace("PhysicsCollider.update(pElapsed) SKIP");
+			}
 		};
 		
 		override public function isColliding(pEntityA:Entity, 
@@ -247,13 +265,9 @@ package com.thenitro.nphysics.world {
 			
 			var tangent:Vector2D = relativeVelocity.clone();
 				tangent.substract(pManifold.normal).multiplyScalar(rvDotNormal);
-			
-			trace("PhysicsCollider.resolveCollision(pManifold)", tangent.x, tangent.y);
 				
 				tangent.normalize();
 			
-			trace("PhysicsCollider.resolveCollision(pManifold)", tangent.x, tangent.y);
-				
 			var jt:Number = relativeVelocity.dotProduct(tangent);
 				jt /= a.invMass + b.invMass;
 				
@@ -264,8 +278,6 @@ package com.thenitro.nphysics.world {
 			} else {
 				tangent.multiplyScalar(-j).multiplyScalar(mu);
 			}
-				
-			trace("PhysicsCollider.resolveCollision(pManifold)", tangent.x, tangent.y);
 			
 			a.velocity.x -= a.invMass * tangent.x;
 			a.velocity.y -= a.invMass * tangent.y;
@@ -277,6 +289,7 @@ package com.thenitro.nphysics.world {
 			
 			_pool.put(relativeVelocity);
 			_pool.put(impulse);
+			_pool.put(tangent);
 		};
 		
 		private function positionalCorrection(pManifold:Manifold):void {
