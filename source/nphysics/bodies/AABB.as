@@ -1,6 +1,5 @@
 package nphysics.bodies {
-	import com.thenitro.ngine.math.vectors.Vector2D;
-	import com.thenitro.ngine.pool.Pool;
+	import ngine.math.vectors.Vector2D;
 	
 	public class AABB extends Body {
 		private var _max:Vector2D;
