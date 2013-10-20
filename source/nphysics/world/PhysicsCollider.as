@@ -1,13 +1,13 @@
-package com.thenitro.nphysics.world {
-	import com.thenitro.ngine.display.gameentity.Entity;
-	import com.thenitro.ngine.display.gameentity.collider.GridCollider;
-	import com.thenitro.ngine.math.TMath;
-	import com.thenitro.ngine.math.TRectangle;
-	import com.thenitro.ngine.math.vectors.Vector2D;
-	import com.thenitro.ngine.pool.Pool;
-	import com.thenitro.nphysics.bounding.AABB;
-	import com.thenitro.nphysics.bounding.Body;
-	import com.thenitro.nphysics.bounding.Circle;
+package nphysics.world {
+	import ngine.core.Entity;
+	import ngine.core.collider.GridCollider;
+	import ngine.math.TMath;
+	import ngine.math.TRectangle;
+	import ngine.math.vectors.Vector2D;
+	import ngine.pool.Pool;
+	import nphysics.bodies.AABB;
+	import nphysics.bodies.Body;
+	import nphysics.bodies.Circle;
 	
 	public final class PhysicsCollider extends GridCollider {
 		private var _pool:Pool = Pool.getInstance();
@@ -235,6 +235,8 @@ package com.thenitro.nphysics.world {
 		};
 		
 		private function resolveCollision(pManifold:Manifold):void {
+			trace("PhysicsCollider.resolveCollision(pManifold)", pManifold.normal);
+			
 			var a:Body = pManifold.a;
 			var b:Body = pManifold.b;
 			
@@ -248,6 +250,7 @@ package com.thenitro.nphysics.world {
 				return;
 			}
 			
+			//Impulse
 			var e:Number = Math.max(a.restitution, b.restitution);
 			var j:Number = -(1 + e) * rvDotNormal;
 				j /= a.invMass + b.invMass;
@@ -260,6 +263,7 @@ package com.thenitro.nphysics.world {
 			b.velocity.x += b.invMass * impulse.x * (b.restitution + 1);
 			b.velocity.y += b.invMass * impulse.y * (b.restitution + 1);
 			
+			//Friction
 			var tangent:Vector2D = relativeVelocity.clone();
 				tangent.substract(pManifold.normal).multiplyScalar(rvDotNormal);
 				
@@ -283,6 +287,9 @@ package com.thenitro.nphysics.world {
 			b.velocity.y += b.invMass * tangent.y;
 			
 			positionalCorrection(pManifold);
+			
+			a.touch(pManifold);
+			b.touch(pManifold);
 			
 			_pool.put(relativeVelocity);
 			_pool.put(impulse);

@@ -1,7 +1,7 @@
-package com.thenitro.nphysics.world {
-	import com.thenitro.ngine.display.gameentity.manager.EntityManager;
-	import com.thenitro.ngine.math.TRectangle;
-	import com.thenitro.nphysics.bounding.Body;
+package nphysics.world {
+	import ngine.core.manager.EntityManager;
+	import ngine.math.TRectangle;
+	import nphysics.bodies.Body;
 	
 	import starling.core.Starling;
 	import starling.display.Quad;
@@ -44,6 +44,10 @@ package com.thenitro.nphysics.world {
 		
 		public function get canvas():Sprite {
 			return _canvas;
+		};
+		
+		public function get bounds():TRectangle {
+			return _bounds;
 		};
 		
 		private function addedToStageEventHandler(pEvent:Event):void {

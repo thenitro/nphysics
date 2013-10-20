@@ -1,4 +1,4 @@
-package com.thenitro.nphysics.bounding {
+package nphysics.bodies {
 	import com.thenitro.ngine.math.vectors.Vector2D;
 	import com.thenitro.ngine.pool.Pool;
 	

@@ -1,8 +1,8 @@
-package com.thenitro.nphysics.world {
-	import com.thenitro.ngine.math.vectors.Vector2D;
-	import com.thenitro.ngine.pool.IReusable;
-	import com.thenitro.ngine.pool.Pool;
-	import com.thenitro.nphysics.bounding.Body;
+package nphysics.world {
+	import ngine.math.vectors.Vector2D;
+	import ngine.pool.IReusable;
+	import ngine.pool.Pool;
+	import nphysics.bodies.Body;
 	
 	public final class Manifold implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();

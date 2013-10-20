@@ -1,7 +1,8 @@
-package com.thenitro.nphysics.bounding {
-	import com.thenitro.ngine.display.gameentity.Entity;
-	import com.thenitro.ngine.math.TRectangle;
-	import com.thenitro.ngine.math.vectors.Vector2D;
+package nphysics.bodies {
+	import ngine.core.Entity;
+	import ngine.math.TRectangle;
+	import ngine.math.vectors.Vector2D;
+	import nphysics.world.Manifold;
 	
 	import starling.display.DisplayObject;
 	
@@ -59,6 +60,10 @@ package com.thenitro.nphysics.bounding {
 		
 		public function init(pTexture:DisplayObject):void {
 			_canvas = pTexture;
+		};
+		
+		public function touch(pManifold:Manifold):void {
+			
 		};
 		
 		override public function update(pElapsed:Number):void {
