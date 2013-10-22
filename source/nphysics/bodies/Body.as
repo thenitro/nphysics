@@ -93,6 +93,7 @@ package nphysics.bodies {
 			super.dispose();
 			
 			_pool.put(_oldVelocity);
+			_oldVelocity = null;
 		};
 	};
 }

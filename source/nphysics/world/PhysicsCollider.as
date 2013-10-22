@@ -5,6 +5,7 @@ package nphysics.world {
 	import ngine.math.TRectangle;
 	import ngine.math.vectors.Vector2D;
 	import ngine.pool.Pool;
+	
 	import nphysics.bodies.AABB;
 	import nphysics.bodies.Body;
 	import nphysics.bodies.Circle;
@@ -18,10 +19,14 @@ package nphysics.world {
 		private var _correction:Number;
 		private var _slop:Number;
 		
-		public function PhysicsCollider(pBounds:TRectangle, pGridSize:Number, 
+		private var _world:World;
+		
+		public function PhysicsCollider(pWorld:World, pGridSize:Number, 
 										pCorrection:Number, pSlop:Number,
 										pFrameRate:Number) {
-			super(pBounds.size.x, pBounds.size.y, pGridSize, null);
+			super(pWorld.bounds.size.x, pWorld.bounds.size.y, pGridSize, null);
+			
+			_world = pWorld;
 			
 			_correction = pCorrection;
 			_slop       = pSlop;
@@ -71,6 +76,7 @@ package nphysics.world {
 			if (manifold) {
 				resolveCollision(manifold);
 				
+				_world.dispatchEventWith(World.COLLIDED_EVENT, false, manifold)
 				_pool.put(manifold);
 				
 				return true;

@@ -10,8 +10,11 @@ package nphysics.world {
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.Event;
+	import starling.events.EventDispatcher;
 	
-	public final class World {
+	public final class World extends EventDispatcher {
+		public static const COLLIDED_EVENT:String = 'collided_event';
+		
 		private var _canvas:Sprite;
 		private var _inited:Boolean;
 		
@@ -58,25 +61,27 @@ package nphysics.world {
 			return _bounds;
 		};
 		
-		public function get collider():PhysicsCollider {
-			return _collider;
-		};
-		
 		private function addedToStageEventHandler(pEvent:Event):void {
 			_canvas.removeEventListener(Event.ADDED_TO_STAGE, 
 										addedToStageEventHandler);
 			
 			_inited = true;
 			
-			_collider = new PhysicsCollider(_bounds, _cellSize, 
-											_correction, _slop, Starling.current.nativeStage.frameRate)
+			_collider = new PhysicsCollider(this, _cellSize, _correction, 
+											_slop, Starling.current.nativeStage.frameRate)
 			
 			_manager = new EntityManager();
 			_manager.setCollider(_collider);
 			_manager.addEventListener(EntityManager.EXPIRED,
 									  entityExpiredEventHandler);
-			
+		};
+		
+		public function start():void {
 			_canvas.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+		};
+		
+		public function stop():void {
+			_canvas.removeEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
 		};
 		
 		public function addBody(pBody:Body):void {
@@ -99,6 +104,12 @@ package nphysics.world {
 		
 		public function addForce(pForce:AbstractForce):void {
 			_forces.push(pForce);
+		};
+		
+		public function clean():void {
+			stop();
+			
+			_manager.clean();
 		};
 		
 		private function entityExpiredEventHandler(pEvent:Event):void {
