@@ -1,7 +1,9 @@
 package nphysics.world {
 	import ngine.core.manager.EntityManager;
 	import ngine.math.TRectangle;
+	
 	import nphysics.bodies.Body;
+	import nphysics.world.forces.AbstractForce;
 	
 	import starling.core.Starling;
 	import starling.display.Quad;
@@ -17,9 +19,13 @@ package nphysics.world {
 		
 		private var _bounds:TRectangle;
 		
-		private var _gridSize:Number;
+		private var _cellSize:Number;
 		private var _correction:Number;
 		private var _slop:Number;
+		
+		private var _forces:Vector.<AbstractForce>;
+		
+		private var _collider:PhysicsCollider;
 		
 		public function World(pBounds:TRectangle, pGridSize:Number, 
 							  pCorrection:Number, pSlop:Number) {
@@ -28,7 +34,7 @@ package nphysics.world {
 			_inited = false;
 			
 			_bounds     = pBounds;
-			_gridSize   = pGridSize;
+			_cellSize   = pGridSize;
 			_slop       = pSlop;
 			_correction = pCorrection;
 			
@@ -40,6 +46,8 @@ package nphysics.world {
 			_canvas.addChild(bg);
 			_canvas.addEventListener(Event.ADDED_TO_STAGE, 
 									 addedToStageEventHandler);
+			
+			_forces = new Vector.<AbstractForce>();
 		};
 		
 		public function get canvas():Sprite {
@@ -50,14 +58,21 @@ package nphysics.world {
 			return _bounds;
 		};
 		
+		public function get collider():PhysicsCollider {
+			return _collider;
+		};
+		
 		private function addedToStageEventHandler(pEvent:Event):void {
 			_canvas.removeEventListener(Event.ADDED_TO_STAGE, 
 										addedToStageEventHandler);
 			
 			_inited = true;
 			
+			_collider = new PhysicsCollider(_bounds, _cellSize, 
+											_correction, _slop, Starling.current.nativeStage.frameRate)
+			
 			_manager = new EntityManager();
-			_manager.setCollider(new PhysicsCollider(_bounds, _gridSize, _correction, _slop, Starling.current.nativeStage.frameRate));
+			_manager.setCollider(_collider);
 			_manager.addEventListener(EntityManager.EXPIRED,
 									  entityExpiredEventHandler);
 			
@@ -82,12 +97,34 @@ package nphysics.world {
 			_canvas.removeChild(pBody.canvas);
 		};
 		
+		public function addForce(pForce:AbstractForce):void {
+			_forces.push(pForce);
+		};
+		
 		private function entityExpiredEventHandler(pEvent:Event):void {
 			_canvas.removeChild(pEvent.data.canvas);
 		};
 		
 		private function enterFrameEventHandler(pEvent:EnterFrameEvent):void {
 			_manager.update();
+			
+			applyForces();
+		};
+		
+		private function applyForces():void {
+			if (!_forces.length) {
+				return;
+			}
+			
+			var body:Body = _manager.entities.first as Body;
+			
+			while (body) {
+				for each (var force:AbstractForce in _forces) {
+					force.applyTo(body);
+				}
+				
+				body = _manager.entities.next(body) as Body;
+			}
 		};
 	};
 }

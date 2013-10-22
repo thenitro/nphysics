@@ -1,5 +1,5 @@
 package nphysics.bodies {
-	public final class Circle extends Body {
+	public class Circle extends Body {
 		
 		public function Circle() {
 			super();

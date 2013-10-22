@@ -235,8 +235,6 @@ package nphysics.world {
 		};
 		
 		private function resolveCollision(pManifold:Manifold):void {
-			trace("PhysicsCollider.resolveCollision(pManifold)", pManifold.normal);
-			
 			var a:Body = pManifold.a;
 			var b:Body = pManifold.b;
 			
