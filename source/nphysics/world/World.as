@@ -1,6 +1,7 @@
 package nphysics.world {
 	import ngine.core.manager.EntityManager;
 	import ngine.math.TRectangle;
+	import ngine.math.vectors.Vector2D;
 	
 	import nphysics.bodies.Body;
 	import nphysics.world.forces.AbstractForce;
@@ -104,6 +105,10 @@ package nphysics.world {
 		
 		public function addForce(pForce:AbstractForce):void {
 			_forces.push(pForce);
+		};
+		
+		public function getNearbyEntities(pPosition:Vector2D, pRadius:Number, pSorted:Boolean):Array {
+			return _manager.getNearbyEntities(pPosition, pRadius, pSorted);
 		};
 		
 		public function clean():void {
