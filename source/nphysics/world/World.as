@@ -1,4 +1,5 @@
 package nphysics.world {
+	import ngine.collections.LinkedList;
 	import ngine.core.manager.EntityManager;
 	import ngine.math.TRectangle;
 	import ngine.math.vectors.Vector2D;
@@ -107,8 +108,10 @@ package nphysics.world {
 			_forces.push(pForce);
 		};
 		
-		public function getNearbyEntities(pPosition:Vector2D, pRadius:Number, pSorted:Boolean):Array {
-			return _manager.getNearbyEntities(pPosition, pRadius, pSorted);
+		public function getNearbyEntities(pPosition:Vector2D, pRadius:Number, 
+										  pFilterFunction:Function = null, 
+										  pSorted:Boolean = false):Array {
+			return _manager.getNearbyEntities(pPosition, pRadius, pFilterFunction, pSorted);
 		};
 		
 		public function clean():void {
