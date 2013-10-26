@@ -32,11 +32,14 @@ package nphysics.world {
 		
 		private var _collider:PhysicsCollider;
 		
+		private var _stopped:Boolean;
+		
 		public function World(pBounds:TRectangle, pGridSize:Number, 
 							  pCorrection:Number, pSlop:Number) {
 			super();
 			
-			_inited = false;
+			_inited  = false;
+			_stopped = true;
 			
 			_bounds     = pBounds;
 			_cellSize   = pGridSize;
@@ -63,6 +66,10 @@ package nphysics.world {
 			return _bounds;
 		};
 		
+		public function get stopped():Boolean {
+			return _stopped;
+		};
+		
 		private function addedToStageEventHandler(pEvent:Event):void {
 			_canvas.removeEventListener(Event.ADDED_TO_STAGE, 
 										addedToStageEventHandler);
@@ -79,10 +86,14 @@ package nphysics.world {
 		};
 		
 		public function start():void {
+			_stopped = false; 
+			
 			_canvas.addEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
 		};
 		
 		public function stop():void {
+			_stopped = true;
+			
 			_canvas.removeEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
 		};
 		
