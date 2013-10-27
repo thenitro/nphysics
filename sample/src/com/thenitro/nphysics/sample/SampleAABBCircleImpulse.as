@@ -1,9 +1,11 @@
 package com.thenitro.nphysics.sample {
-	import com.thenitro.ngine.math.Random;
-	import com.thenitro.ngine.math.TRectangle;
-	import com.thenitro.nphysics.bounding.AABB;
-	import com.thenitro.nphysics.bounding.Circle;
-	import com.thenitro.nphysics.world.World;
+	import ngine.math.Random;
+	import ngine.math.TRectangle;
+	
+	import nphysics.bodies.AABB;
+	import nphysics.bodies.Circle;
+	import nphysics.world.World;
+	import nphysics.world.forces.BoundingForce;
 	
 	import starling.display.Quad;
 	import starling.display.Shape;
@@ -31,16 +33,23 @@ package com.thenitro.nphysics.sample {
 			
 			addChild(world.canvas);
 			
+			var force:BoundingForce = new BoundingForce();
+				force.init(bounds);
+			
+			world.addForce(force);
+			world.start();
+			
 			for (var i:int = 0; i < 40; i++) {
-				var rectB:AABB  = new AABB();
+				var rectB:AABB = new AABB();
 				
 					rectB.position.randomize(0, Math.min(stage.stageWidth, stage.stageHeight));
 					
 					rectB.max.x = SIZE;
 					rectB.max.y = SIZE;
 					
-					rectB.restitution = 0.1;
-					rectB.mass = 20;
+					rectB.friction = 0.1
+					rectB.restitution = 0.4;
+					rectB.mass = 1;
 					
 					rectB.velocity.randomize(-20.0, 20.0);
 				
@@ -58,8 +67,9 @@ package com.thenitro.nphysics.sample {
 					circle.position.randomize(0, Math.min(stage.stageWidth, stage.stageHeight));
 					
 					circle.size = SIZE;
-					circle.restitution = 0.1;
-					circle.mass = 10;
+					circle.friction = 0.1
+					circle.restitution = 0.4;
+					circle.mass = 1;
 					
 					circle.velocity.randomize(-10.0, 10.0);
 				

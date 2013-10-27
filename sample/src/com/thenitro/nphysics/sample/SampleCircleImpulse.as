@@ -1,8 +1,10 @@
 package com.thenitro.nphysics.sample {
-	import com.thenitro.ngine.math.Random;
-	import com.thenitro.ngine.math.TRectangle;
-	import com.thenitro.nphysics.bounding.Circle;
-	import com.thenitro.nphysics.world.World;
+	import ngine.math.Random;
+	import ngine.math.TRectangle;
+	
+	import nphysics.bodies.Circle;
+	import nphysics.world.World;
+	import nphysics.world.forces.BoundingForce;
 	
 	import starling.display.Shape;
 	import starling.display.Sprite;
@@ -28,21 +30,30 @@ package com.thenitro.nphysics.sample {
 			var world:World = new World(bounds, RADIUS * 4, 0.2, 0.01);
 			
 			addChild(world.canvas);
+
+			var force:BoundingForce = new BoundingForce();
+				force.init(bounds);
 			
-			for (var i:int = 0; i < 500; i++) {
+				world.addForce(force);
+				world.start();
+			
+			for (var i:int = 0; i < 50; i++) {
 				var circle:Circle  = new Circle();
 					circle.position.randomize(0, Math.min(stage.stageWidth, stage.stageHeight));
 					
 					circle.size = RADIUS;
+					circle.mass = 1.0;
+					circle.friction = 0.01;
+					circle.restitution = 0.3;
 				
-					circle.velocity.randomize(-1.0, 1.0);
+					circle.velocity.randomize(-100.0, 100.0);
 				
 				var shape:Shape = new Shape();
 				
 					shape.graphics.beginFill(Random.color);
 					shape.graphics.drawCircle(0, 0, RADIUS);
 				
-				circle.init(shape, bounds);
+				circle.init(shape);
 				
 				world.addBody(circle);
 			}

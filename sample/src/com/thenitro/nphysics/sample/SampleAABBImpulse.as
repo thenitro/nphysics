@@ -1,8 +1,10 @@
 package com.thenitro.nphysics.sample {
-	import com.thenitro.ngine.math.Random;
-	import com.thenitro.ngine.math.TRectangle;
-	import com.thenitro.nphysics.bounding.AABB;
-	import com.thenitro.nphysics.world.World;
+	import ngine.math.Random;
+	import ngine.math.TRectangle;
+	
+	import nphysics.bodies.AABB;
+	import nphysics.world.World;
+	import nphysics.world.forces.BoundingForce;
 	
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -25,14 +27,15 @@ package com.thenitro.nphysics.sample {
 				bounds.size.x = stage.stageWidth  - SIZE;
 				bounds.size.y = stage.stageHeight - SIZE;
 				
-			var world:World = new World(bounds, stage.stageWidth, 0.8, 0.01);
+			var world:World = new World(bounds, SIZE * 4, 0.8, 0.01);
 			
 			addChild(world.canvas);
 			
-			createFloor(world);
+			var force:BoundingForce = new BoundingForce();
+				force.init(bounds);
 			
-			
-			
+			world.addForce(force);
+			world.start();
 			
 			for (var i:int = 0; i < 20; i++) {
 				var rectB:AABB  = new AABB();
@@ -42,12 +45,11 @@ package com.thenitro.nphysics.sample {
 					rectB.max.x = SIZE;
 					rectB.max.y = SIZE;
 					
-					rectB.restitution = 0.2;
-					rectB.mass = 100;
+					rectB.restitution = 0.4;
+					rectB.friction = 0.1;
+					rectB.mass = 1.0;
 					
-					rectB.friction = 1.0;
-					
-					rectB.velocity.y = Math.random() * 2;
+					rectB.velocity.randomize(-100, 100);
 					
 					var quad:Quad = new Quad(SIZE, SIZE, Random.color);
 						quad.pivotX = SIZE / 2;
@@ -57,29 +59,6 @@ package com.thenitro.nphysics.sample {
 				
 				world.addBody(rectB);
 			}
-		};
-		
-		private function createFloor(pWorld:World):void {
-			var floor:AABB  = new AABB();
-			
-				floor.position.x = stage.stageWidth / 2;
-				floor.position.y = stage.stageHeight - 50;
-				
-				floor.max.x = stage.stageWidth;
-				floor.max.y = 100;
-				
-				floor.restitution = 0.2;
-				floor.mass = 0;
-				
-				floor.friction = 0.3;
-				
-			var floorV:Quad = new Quad(floor.max.x, floor.max.y, Random.color);
-				floorV.pivotX = floor.max.x / 2;
-				floorV.pivotY = floor.max.y / 2;
-				
-				floor.init(floorV);
-			
-			pWorld.addBody(floor);
 		};
 	};
 }
