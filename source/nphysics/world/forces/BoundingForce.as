@@ -1,4 +1,5 @@
 package nphysics.world.forces {
+	import ngine.core.Entity;
 	import ngine.math.TRectangle;
 	
 	import nphysics.bodies.Body;
@@ -14,7 +15,7 @@ package nphysics.world.forces {
 			_bounds = pBounds;
 		};
 		
-		override public function applyTo(pBody:Body):void {
+		override public function applyTo(pBody:Entity):void {
 			super.applyTo(pBody);
 			
 			if (pBody.position.x < _bounds.position.x) {

@@ -1,5 +1,5 @@
 package nphysics.world.forces {
-	import nphysics.bodies.Body;
+	import ngine.core.Entity;
 	
 	public class AbstractForce {
 		
@@ -7,7 +7,7 @@ package nphysics.world.forces {
 			
 		};
 		
-		public function applyTo(pBody:Body):void {
+		public function applyTo(pBody:Entity):void {
 			
 		};
 	};

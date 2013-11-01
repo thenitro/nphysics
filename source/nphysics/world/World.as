@@ -1,5 +1,6 @@
 package nphysics.world {
 	import ngine.collections.LinkedList;
+	import ngine.core.Entity;
 	import ngine.core.manager.EntityManager;
 	import ngine.math.TRectangle;
 	import ngine.math.vectors.Vector2D;
@@ -70,6 +71,10 @@ package nphysics.world {
 			return _stopped;
 		};
 		
+		public function get entityManager():EntityManager {
+			return _manager;
+		};
+		
 		private function addedToStageEventHandler(pEvent:Event):void {
 			_canvas.removeEventListener(Event.ADDED_TO_STAGE, 
 										addedToStageEventHandler);
@@ -97,7 +102,7 @@ package nphysics.world {
 			_canvas.removeEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
 		};
 		
-		public function addBody(pBody:Body):void {
+		public function add(pBody:Entity):void {
 			if (!_inited) {
 				return;
 			}
@@ -106,7 +111,7 @@ package nphysics.world {
 			_canvas.addChild(pBody.canvas);
 		};
 		
-		public function removeBody(pBody:Body):void {
+		public function remove(pBody:Entity):void {
 			if (!_inited) {
 				return;
 			}
@@ -136,7 +141,7 @@ package nphysics.world {
 		};
 		
 		private function enterFrameEventHandler(pEvent:EnterFrameEvent):void {
-			_manager.update();
+			_manager.update(pEvent.passedTime);
 			
 			applyForces();
 		};
@@ -146,14 +151,14 @@ package nphysics.world {
 				return;
 			}
 			
-			var body:Body = _manager.entities.first as Body;
+			var body:Entity = _manager.entities.first as Entity;
 			
 			while (body) {
 				for each (var force:AbstractForce in _forces) {
 					force.applyTo(body);
 				}
 				
-				body = _manager.entities.next(body) as Body;
+				body = _manager.entities.next(body) as Entity;
 			}
 		};
 	};
