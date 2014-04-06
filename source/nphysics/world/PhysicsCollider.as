@@ -2,13 +2,13 @@ package nphysics.world {
 	import ngine.core.Entity;
 	import ngine.core.collider.GridCollider;
 	import ngine.math.TMath;
-	import ngine.math.TRectangle;
 	import ngine.math.vectors.Vector2D;
-	import ngine.pool.Pool;
 	
 	import nphysics.bodies.AABB;
 	import nphysics.bodies.Body;
 	import nphysics.bodies.Circle;
+	
+	import npooling.Pool;
 	
 	public final class PhysicsCollider extends GridCollider {
 		private var _pool:Pool = Pool.getInstance();

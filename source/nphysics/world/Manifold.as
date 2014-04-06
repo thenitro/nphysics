@@ -1,8 +1,10 @@
 package nphysics.world {
 	import ngine.math.vectors.Vector2D;
-	import ngine.pool.IReusable;
-	import ngine.pool.Pool;
+	
 	import nphysics.bodies.Body;
+	
+	import npooling.IReusable;
+	import npooling.Pool;
 	
 	public final class Manifold implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();

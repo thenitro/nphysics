@@ -1,11 +1,9 @@
 package nphysics.world {
-	import ngine.collections.LinkedList;
 	import ngine.core.Entity;
 	import ngine.core.manager.EntityManager;
 	import ngine.math.TRectangle;
 	import ngine.math.vectors.Vector2D;
 	
-	import nphysics.bodies.Body;
 	import nphysics.world.forces.AbstractForce;
 	
 	import starling.core.Starling;
