@@ -33,24 +33,20 @@ package nphysics.world {
 		
 		private var _stopped:Boolean;
 		
-		public function World(pBounds:TRectangle, pGridSize:Number, 
+		private var _background:Quad;
+		
+		public function World(pGridSize:Number, 
 							  pCorrection:Number, pSlop:Number) {
 			super();
 			
 			_inited  = false;
 			_stopped = true;
 			
-			_bounds     = pBounds;
 			_cellSize   = pGridSize;
 			_slop       = pSlop;
 			_correction = pCorrection;
 			
 			_canvas = new Sprite();
-			
-			var bg:Quad = new Quad(pBounds.size.x, pBounds.size.y);
-				bg.alpha = 0;
-			
-			_canvas.addChild(bg);
 			_canvas.addEventListener(Event.ADDED_TO_STAGE, 
 									 addedToStageEventHandler);
 			
@@ -73,21 +69,6 @@ package nphysics.world {
 			return _manager;
 		};
 		
-		private function addedToStageEventHandler(pEvent:Event):void {
-			_canvas.removeEventListener(Event.ADDED_TO_STAGE, 
-										addedToStageEventHandler);
-			
-			_inited = true;
-			
-			_collider = new PhysicsCollider(this, _cellSize, _correction, 
-											_slop, Starling.current.nativeStage.frameRate)
-			
-			_manager = new EntityManager();
-			_manager.setCollider(_collider);
-			_manager.addEventListener(EntityManager.EXPIRED,
-									  entityExpiredEventHandler);
-		};
-		
 		public function start():void {
 			_stopped = false; 
 			
@@ -98,6 +79,19 @@ package nphysics.world {
 			_stopped = true;
 			
 			_canvas.removeEventListener(Event.ENTER_FRAME, enterFrameEventHandler);
+		};
+		
+		public function setBounds(pBounds:TRectangle):void {
+			_bounds = pBounds;
+			
+			if (_background) {
+				_canvas.removeChild(_background, true);
+			}
+			
+			_background = new Quad(pBounds.size.x, pBounds.size.y);
+			_background.alpha = 0.0;
+			
+			_canvas.addChildAt(_background, 0);
 		};
 		
 		public function add(pBody:Entity):void {
@@ -132,6 +126,21 @@ package nphysics.world {
 			stop();
 			
 			_manager.clean();
+		};
+		
+		private function addedToStageEventHandler(pEvent:Event):void {
+			_canvas.removeEventListener(Event.ADDED_TO_STAGE, 
+										addedToStageEventHandler);
+			
+			_inited = true;
+			
+			_collider = new PhysicsCollider(this, _cellSize, _correction, 
+											_slop, Starling.current.nativeStage.frameRate)
+			
+			_manager = new EntityManager();
+			_manager.setCollider(_collider);
+			_manager.addEventListener(EntityManager.EXPIRED,
+									  entityExpiredEventHandler);
 		};
 		
 		private function entityExpiredEventHandler(pEvent:Event):void {
