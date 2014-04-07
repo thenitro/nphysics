@@ -91,6 +91,12 @@ package nphysics.world {
 			_background = new Quad(pBounds.size.x, pBounds.size.y);
 			_background.alpha = 0.0;
 			
+			var parameters:PhysicsColliderParameters = PhysicsColliderParameters.NEW;
+				parameters.init(this, _cellSize, _correction, _slop, 
+								Starling.current.nativeStage.frameRate);
+			
+			_collider.setup(parameters);
+			
 			_canvas.addChildAt(_background, 0);
 		};
 		
@@ -119,7 +125,8 @@ package nphysics.world {
 		public function getNearbyEntities(pPosition:Vector2D, pRadius:Number, 
 										  pFilterFunction:Function = null, 
 										  pSorted:Boolean = false):Array {
-			return _manager.getNearbyEntities(pPosition, pRadius, pFilterFunction, pSorted);
+			return _manager.getNearbyEntities(pPosition, pRadius, 
+											  pFilterFunction, pSorted);
 		};
 		
 		public function clean():void {
@@ -134,8 +141,7 @@ package nphysics.world {
 			
 			_inited = true;
 			
-			_collider = new PhysicsCollider(this, _cellSize, _correction, 
-											_slop, Starling.current.nativeStage.frameRate)
+			_collider = new PhysicsCollider();
 			
 			_manager = new EntityManager();
 			_manager.setCollider(_collider);

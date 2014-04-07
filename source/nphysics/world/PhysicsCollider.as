@@ -1,6 +1,8 @@
 package nphysics.world {
 	import ngine.core.Entity;
 	import ngine.core.collider.GridCollider;
+	import ngine.core.collider.abstract.IColliderParameters;
+	import ngine.core.collider.parameters.GridColliderParameters;
 	import ngine.math.TMath;
 	import ngine.math.vectors.Vector2D;
 	
@@ -11,37 +13,39 @@ package nphysics.world {
 	import npooling.Pool;
 	
 	public final class PhysicsCollider extends GridCollider {
-		private var _pool:Pool = Pool.getInstance();
+		private static var _pool:Pool = Pool.getInstance();
 		
+		private var _parameters:PhysicsColliderParameters;
 		private var _accumulator:Number;
-		private var _dt:Number;
 		
-		private var _correction:Number;
-		private var _slop:Number;
-		
-		private var _world:World;
-		
-		public function PhysicsCollider(pWorld:World, pGridSize:Number, 
-										pCorrection:Number, pSlop:Number,
-										pFrameRate:Number) {
-			super(pWorld.bounds.size.x, pWorld.bounds.size.y, pGridSize, null);
-			
-			_world = pWorld;
-			
-			_correction = pCorrection;
-			_slop       = pSlop;
-			
+		public function PhysicsCollider() {
 			_accumulator = 0;
-			_dt          = 1 / pFrameRate;
+		};
+		
+		override public function setup(pParameters:IColliderParameters):void {
+			_pool.put(_parameters);
+			_parameters = pParameters as PhysicsColliderParameters;
+			
+			var gridCollider:GridColliderParameters = GridColliderParameters.NEW;
+				gridCollider.init(null, 
+								  _parameters.world.bounds.size.x,
+								  _parameters.world.bounds.size.y,
+								  _parameters.gridSize);
+			
+			super.setup(gridCollider);
 		};
 		
 		override public function update(pElapsed:Number):void {
+			if (!_parameters) {
+				return;
+			}
+			
 			_accumulator += pElapsed;
 			
-			if (_accumulator > _dt) {
+			if (_accumulator > _parameters.dt) {
 				super.update(pElapsed);
 				
-				_accumulator -= _dt;
+				_accumulator -= _parameters.dt;
 			}
 		};
 		
@@ -76,7 +80,7 @@ package nphysics.world {
 			if (manifold) {
 				resolveCollision(manifold);
 				
-				_world.dispatchEventWith(World.COLLIDED_EVENT, false, manifold)
+				_parameters.world.dispatchEventWith(World.COLLIDED_EVENT, false, manifold)
 				_pool.put(manifold);
 				
 				return true;
@@ -301,7 +305,7 @@ package nphysics.world {
 		};
 		
 		private function positionalCorrection(pManifold:Manifold):void {
-			var correction:Number = Math.max(pManifold.penetration - _slop, 0) / (pManifold.a.invMass + pManifold.b.invMass) * _correction;
+			var correction:Number = Math.max(pManifold.penetration - _parameters.slop, 0) / (pManifold.a.invMass + pManifold.b.invMass) * _parameters.correction;
 			
 			pManifold.a.position.x -= pManifold.a.invMass * correction * pManifold.normal.x;
 			pManifold.a.position.y -= pManifold.a.invMass * correction * pManifold.normal.y;
