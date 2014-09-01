@@ -1,12 +1,13 @@
 package nphysics.bodies {
-	import ngine.core.Entity;
-	import ngine.math.TRectangle;
-	import ngine.math.vectors.Vector2D;
-	import nphysics.world.Manifold;
-	
-	import starling.display.DisplayObject;
-	
-	public class Body extends Entity {
+    import ngine.core.Entity;
+
+    import nmath.vectors.Vector2D;
+
+    import nphysics.world.Manifold;
+
+    import starling.display.DisplayObject;
+
+    public class Body extends Entity {
 		private static const GRAVITY:Number = 9.81;
 		
 		private var _mass:Number;

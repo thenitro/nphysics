@@ -1,7 +1,7 @@
 package nphysics.bodies {
-	import ngine.math.vectors.Vector2D;
-	
-	public class AABB extends Body {
+    import nmath.vectors.Vector2D;
+
+    public class AABB extends Body {
 		private var _max:Vector2D;
 		
 		public function AABB() {

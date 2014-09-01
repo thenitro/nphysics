@@ -1,12 +1,12 @@
 package nphysics.world {
-	import ngine.math.vectors.Vector2D;
-	
-	import nphysics.bodies.Body;
-	
-	import npooling.IReusable;
-	import npooling.Pool;
-	
-	public final class Manifold implements IReusable {
+    import nmath.vectors.Vector2D;
+
+    import nphysics.bodies.Body;
+
+    import npooling.IReusable;
+    import npooling.Pool;
+
+    public final class Manifold implements IReusable {
 		private static var _pool:Pool = Pool.getInstance();
 		
 		public var a:Body;
@@ -15,6 +15,7 @@ package nphysics.world {
 		public var penetration:Number;
 		
 		private var _normal:Vector2D;
+        private var _disposed:Boolean;
 		
 		public function Manifold() {
 			_normal = Vector2D.ZERO;
@@ -34,10 +35,28 @@ package nphysics.world {
 		public function get reflection():Class {
 			return Manifold;
 		};
+
+        public function get disposed():Boolean {
+            return _disposed;
+        };
 		
 		public function get normal():Vector2D {
 			return _normal;
 		};
+
+        public function clone():Manifold {
+            var result:Manifold = EMPTY;
+
+                result.a = a;
+                result.b = b;
+
+                result.penetration = penetration;
+
+                result.normal.x = normal.x;
+                result.normal.y = normal.y;
+
+            return result;
+        };
 		
 		public function poolPrepare():void {
 			_normal.zero();
@@ -49,6 +68,8 @@ package nphysics.world {
 		};
 		
 		public function dispose():void {
+            _disposed = true;
+
 			_pool.put(_normal);
 			_normal = null;
 			

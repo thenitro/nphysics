@@ -6,7 +6,9 @@ package nphysics.world {
 	
 	public final class PhysicsColliderParameters implements IColliderParameters, IReusable {
 		private static var _pool:Pool = Pool.getInstance();
-		
+
+        private var _disposed:Boolean;
+
 		private var _world:World;
 		
 		private var _gridSize:Number;
@@ -35,6 +37,10 @@ package nphysics.world {
 		public function get reflection():Class {
 			return PhysicsColliderParameters;
 		};
+
+        public function get disposed():Boolean {
+            return _disposed;
+        };
 		
 		public function get colliderMethod():Function {
 			return null;
@@ -78,6 +84,7 @@ package nphysics.world {
 		};
 		
 		public function dispose():void {
+            _disposed = true;
 			_world = null;
 		};
 	}

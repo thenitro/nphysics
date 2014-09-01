@@ -1,18 +1,20 @@
 package nphysics.world {
-	import ngine.core.Entity;
-	import ngine.core.collider.GridCollider;
-	import ngine.core.collider.abstract.IColliderParameters;
-	import ngine.core.collider.parameters.GridColliderParameters;
-	import ngine.math.TMath;
-	import ngine.math.vectors.Vector2D;
-	
-	import nphysics.bodies.AABB;
-	import nphysics.bodies.Body;
-	import nphysics.bodies.Circle;
-	
-	import npooling.Pool;
-	
-	public final class PhysicsCollider extends GridCollider {
+    import ngine.core.Entity;
+    import ngine.core.collider.GridCollider;
+    import ngine.core.collider.abstract.IColliderParameters;
+    import ngine.core.collider.parameters.GridColliderParameters;
+
+    import nmath.TMath;
+
+    import nmath.vectors.Vector2D;
+
+    import nphysics.bodies.AABB;
+    import nphysics.bodies.Body;
+    import nphysics.bodies.Circle;
+
+    import npooling.Pool;
+
+    public final class PhysicsCollider extends GridCollider {
 		private static var _pool:Pool = Pool.getInstance();
 		
 		private var _parameters:PhysicsColliderParameters;
@@ -80,7 +82,7 @@ package nphysics.world {
 			if (manifold) {
 				resolveCollision(manifold);
 				
-				_parameters.world.dispatchEventWith(World.COLLIDED_EVENT, false, manifold)
+				_parameters.world.dispatchEventWith(World.COLLIDED_EVENT, false, manifold);
 				_pool.put(manifold);
 				
 				return true;
@@ -89,7 +91,7 @@ package nphysics.world {
 			return false;
 		};
 		
-		private function AABBtoAABB(pA:AABB, pB:AABB):Manifold {			
+		private function AABBtoAABB(pA:AABB, pB:AABB):Manifold {
 			var normal:Vector2D  = pB.position.substract(pA.position, true);
 			
 			var extentA:Number = pA.max.x / 2;

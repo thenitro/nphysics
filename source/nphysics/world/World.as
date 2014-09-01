@@ -1,19 +1,20 @@
 package nphysics.world {
-	import ngine.core.Entity;
-	import ngine.core.manager.EntityManager;
-	import ngine.math.TRectangle;
-	import ngine.math.vectors.Vector2D;
-	
-	import nphysics.world.forces.AbstractForce;
-	
-	import starling.core.Starling;
-	import starling.display.Quad;
-	import starling.display.Sprite;
-	import starling.events.EnterFrameEvent;
-	import starling.events.Event;
-	import starling.events.EventDispatcher;
-	
-	public final class World extends EventDispatcher {
+    import ngine.core.Entity;
+    import ngine.core.manager.EntityManager;
+
+    import nmath.TRectangle;
+    import nmath.vectors.Vector2D;
+
+    import nphysics.world.forces.AbstractForce;
+
+    import starling.core.Starling;
+    import starling.display.Quad;
+    import starling.display.Sprite;
+    import starling.events.EnterFrameEvent;
+    import starling.events.Event;
+    import starling.events.EventDispatcher;
+
+    public final class World extends EventDispatcher {
 		public static const COLLIDED_EVENT:String = 'collided_event';
 		
 		private var _canvas:Sprite;
@@ -122,7 +123,7 @@ package nphysics.world {
 			_forces.push(pForce);
 		};
 		
-		public function getNearbyEntities(pPosition:Vector2D, pRadius:Number, 
+		public function getNearbyEntities(pPosition:Vector2D, pRadius:Number,
 										  pFilterFunction:Function = null, 
 										  pSorted:Boolean = false):Array {
 			return _manager.getNearbyEntities(pPosition, pRadius, 
