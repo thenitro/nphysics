@@ -1,10 +1,9 @@
 package nphysics.world.forces {
-	import ngine.core.Entity;
-	import ngine.math.TRectangle;
-	
-	import nphysics.bodies.Body;
-	
-	public final class BoundingForce extends AbstractForce {
+    import ngine.core.Entity;
+
+    import nmath.TRectangle;
+
+    public final class BoundingForce extends AbstractForce {
 		private var _bounds:TRectangle;
 		
 		public function BoundingForce() {
