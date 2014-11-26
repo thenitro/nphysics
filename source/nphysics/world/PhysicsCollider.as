@@ -255,7 +255,6 @@ package nphysics.world {
 			
 			if (rvDotNormal > 0) {
 				_pool.put(relativeVelocity);
-				_pool.put(impulse);
 				
 				return;
 			}

@@ -48,7 +48,9 @@ package nphysics.bodies {
 			
 			if (_mass != 0) {
 				_invMass = 1 / _mass;
-			}
+			} else {
+                _invMass = 0.0;
+            }
 		};
 		
 		public function get mass():Number {
