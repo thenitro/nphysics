@@ -26,7 +26,7 @@ package nphysics.world {
 		
 		private var _cellSize:Number;
 		private var _correction:Number;
-		private var _slop:Number;
+		private var _slope:Number;
 		
 		private var _forces:Vector.<AbstractForce>;
 		
@@ -37,14 +37,14 @@ package nphysics.world {
 		private var _background:Quad;
 		
 		public function World(pGridSize:Number, 
-							  pCorrection:Number, pSlop:Number) {
+							  pCorrection:Number, pSlope:Number) {
 			super();
 			
 			_inited  = false;
 			_stopped = true;
 			
 			_cellSize   = pGridSize;
-			_slop       = pSlop;
+			_slope      = pSlope;
 			_correction = pCorrection;
 			
 			_canvas = new Sprite();
@@ -93,7 +93,7 @@ package nphysics.world {
 			_background.alpha = 0.0;
 			
 			var parameters:PhysicsColliderParameters = PhysicsColliderParameters.NEW;
-				parameters.init(this, _cellSize, _correction, _slop, 
+				parameters.init(this, _cellSize, _correction, _slope,
 								Starling.current.nativeStage.frameRate);
 			
 			_collider.setup(parameters);

@@ -14,7 +14,7 @@ package nphysics.world {
 		private var _gridSize:Number;
 		
 		private var _correction:Number;
-		private var _slop:Number;
+		private var _slope:Number;
 		
 		private var _accumulator:Number;
 		private var _dt:Number;
@@ -58,8 +58,8 @@ package nphysics.world {
 			return _correction;
 		};
 		
-		public function get slop():Number {
-			return _slop;
+		public function get slope():Number {
+			return _slope;
 		};
 		
 		public function get dt():Number {
@@ -67,14 +67,14 @@ package nphysics.world {
 		};
 		
 		public function init(pWorld:World, pGridSize:Number, 
-							 pCorrection:Number, pSlop:Number,
+							 pCorrection:Number, pSlope:Number,
 							 pFrameRate:Number):void {
 			_world = pWorld;
 			
 			_gridSize = pGridSize;
 			
 			_correction = pCorrection;
-			_slop       = pSlop;
+			_slope      = pSlope;
 			
 			_dt = 1 / pFrameRate;
 		};

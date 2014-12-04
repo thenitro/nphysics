@@ -306,7 +306,7 @@ package nphysics.world {
 		};
 		
 		private function positionalCorrection(pManifold:Manifold):void {
-			var correction:Number = Math.max(pManifold.penetration - _parameters.slop, 0) / (pManifold.a.invMass + pManifold.b.invMass) * _parameters.correction;
+			var correction:Number = Math.max(pManifold.penetration - _parameters.slope, 0) / (pManifold.a.invMass + pManifold.b.invMass) * _parameters.correction;
 			
 			pManifold.a.position.x -= pManifold.a.invMass * correction * pManifold.normal.x;
 			pManifold.a.position.y -= pManifold.a.invMass * correction * pManifold.normal.y;
